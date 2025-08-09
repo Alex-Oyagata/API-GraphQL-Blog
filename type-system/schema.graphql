@@ -1,0 +1,137 @@
+type Query {
+    autores(id: Int): [autor]
+    categorias(id: Int): [categoria]
+    publicaciones(id: Int): [publicacion]
+    comentarios(id: Int): [comentario]
+    publicacionesConComentarios: [publicacionComentario]
+    autoresConPublicaciones: [autorPublicacion]
+    comentariosPorPublicacion(pub_id: Int!): [publicacionComentario]
+    publicacionesConNumeroComentarios: [publicacionNumeroComentarios]
+    publicacionComentariosLikes(pub_id: Int!): [publicacionComentarioLikes]
+    categoriasPublicacionesCompletas: [categoriaCompleta]
+    autoresEstadisticas: [autorEstadisticas]
+}
+
+type Mutation {
+    crearComentario(comentario: inputComentario): comentario
+    actualizarComentario(comentario: inputComentarioUpdate): comentario
+    eliminarComentario(comentario: inputComentarioDelete): comentario
+    crearPublicacion(publicacion: inputPublicacion): publicacion
+    crearAutor(autor: inputAutor): autor
+    crearCategoria(categoria: inputCategoria): categoria
+}
+
+type autor {
+    aut_id: Int!
+    aut_usuario: String!
+    aut_nombre: String!
+    publicaciones: [publicacion]
+}
+
+type categoria {
+    cat_id: Int!
+    cat_titulo: String!
+    publicaciones: [publicacion]
+}
+
+type publicacion {
+    pub_id: Int!
+    cat_id: Int
+    aut_id: Int
+    pub_titulo: String!
+    pub_descripcion: String!
+    autor: autor
+    categoria: categoria
+    comentarios: [comentario]
+}
+
+type comentario {
+    com_id: Int!
+    pub_id: Int
+    aut_id: Int
+    com_descripcion: String!
+    autor: autor
+    publicacion: publicacion
+    reacciones: [reaccion]
+    numeroLikes: Int
+}
+
+type reaccion {
+    rea_id: Int!
+    com_id: Int!
+    aut_id: Int!
+    rea_like: Boolean!
+}
+
+type publicacionComentario {
+    pub_id: Int
+    pub_titulo: String
+    aut_usuario: String
+    com_descripcion: String
+}
+
+type autorPublicacion {
+    aut_usuario: String
+    aut_nombre: String
+    pub_titulo: String
+    pub_descripcion: String
+}
+
+type publicacionNumeroComentarios {
+    pub_titulo: String
+    numero_comentarios: Int
+}
+
+type publicacionComentarioLikes {
+    pub_titulo: String
+    com_descripcion: String
+    numero_likes: Int
+}
+
+type categoriaCompleta {
+    categoria: String
+    pub_titulo: String
+    com_descripcion: String
+    numero_likes: Int
+    numero_autores_comentarios: Int
+}
+
+type autorEstadisticas {
+    aut_nombre: String
+    categoria: String
+    numero_publicaciones: Int
+    numero_likes: Int
+}
+
+input inputComentario {
+    pub_id: Int!
+    aut_id: Int!
+    com_descripcion: String!
+}
+
+input inputComentarioUpdate {
+    com_id: Int!
+    pub_id: Int!
+    aut_id: Int!
+    com_descripcion: String!
+}
+
+input inputComentarioDelete {
+    com_id: Int!
+}
+
+input inputPublicacion {
+    cat_id: Int!
+    aut_id: Int!
+    pub_titulo: String!
+    pub_descripcion: String!
+}
+
+input inputAutor {
+    aut_usuario: String!
+    aut_nombre: String!
+}
+
+input inputCategoria {
+    cat_titulo: String!
+}
